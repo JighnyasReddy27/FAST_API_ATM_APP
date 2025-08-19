@@ -29,6 +29,15 @@ def deposit(account_id: int, amount: float):
     conn.close()
 
 
+def get_account_by_name(name: str):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, name, balance FROM accounts WHERE name=?", (name,))
+    row = cur.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
 def withdraw(account_id: int, amount: float):
     conn = get_connection()
     cur = conn.cursor()

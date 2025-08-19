@@ -46,3 +46,15 @@ def transfer(transfer: schemas.Transfer):
     if not success:
         raise HTTPException(status_code=400, detail="Transfer failed (check balance or accounts)")
     return {"message": "Transfer successful"}
+
+
+@app.get("/account/{name}")
+def get_account_by_name(name: str):
+    account = crud.get_account_by_name(name)
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return {
+        "account_id": account["id"],
+        "name": account["name"],
+        "balance": account["balance"]
+    }

@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    container_name: atm-api-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./atm.db:/app/atm.db
+    # This new command fixes the database file permission inside the container before starting the app
+    command: >
+      sh -c "chown 1000:1000 /app/atm.db && uvicorn main:app --host 0.0.0.0 --port 8000"

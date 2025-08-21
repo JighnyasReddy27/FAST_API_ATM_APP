@@ -74,3 +74,19 @@ def get_mini_statement(account_id: int):
         raise HTTPException(status_code=404, detail="Account not found")
         
     return {"account_id": account_id, "transactions": history}
+
+@app.get("/welcome")
+def welcome_message():
+    return {"message": "Welcome to the ATM!"}
+
+@app.get("/ministatement/{account_id}", response_model=schemas.MiniStatementResponse)
+def get_mini_statement(account_id: int):
+    """
+    Provides a mini statement with the last 5 transactions for an account.
+    """
+    history = crud.get_transaction_history(account_id)
+    
+    if history is None:
+        raise HTTPException(status_code=404, detail="Account not found")
+        
+    return {"account_id": account_id, "transactions": history}

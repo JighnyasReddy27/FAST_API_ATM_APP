@@ -11,6 +11,8 @@ def get_connection():
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
+    
+    # This table already exists
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS accounts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,6 +20,18 @@ def init_db():
         balance REAL NOT NULL DEFAULT 0.0
     )
     """)
+    
+    # ADD THIS PART
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        account_id INTEGER NOT NULL,
+        type TEXT NOT NULL,
+        amount REAL NOT NULL,
+        timestamp TEXT NOT NULL,
+        FOREIGN KEY (account_id) REFERENCES accounts (id)
+    )
+    """)
+    
     conn.commit()
     conn.close()
-
